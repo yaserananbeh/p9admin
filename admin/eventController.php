@@ -205,6 +205,10 @@ $event_data = $response_data;
               <a href="eventController.php">
                 <i class="fas fa-table"></i>Events Controller</a>
             </li>
+            <li class="has-sub">
+              <a href="giftController.php">
+                <i class="fas fa-table"></i>Gifts Controller</a>
+            </li>
           </ul>
         </nav>
       </div>

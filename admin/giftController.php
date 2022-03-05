@@ -3,11 +3,11 @@ session_start();
 // include "../config/connect.php";
 
 
-if (isset($_POST['deleteCat'])) {
-  $id = $_POST['deleteCat'];
+if (isset($_POST['deleteGift'])) {
+  $id = $_POST['deleteGift'];
   $data = array();
   $data_json = json_encode($data);
-  $url = "http://localhost:5000/customercategories/$id";
+  $url = "http://localhost:5000/gifts/$id";
   $curl_handle = curl_init();
   curl_setopt($curl_handle, CURLOPT_URL, $url);
   curl_setopt($curl_handle, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Content-Length: ' . strlen($data_json)));
@@ -19,11 +19,11 @@ if (isset($_POST['deleteCat'])) {
 }
 if (isset($_POST['submitUpdate'])) {
   $id = $_POST['submitUpdate'];
-  $newCatName = $_POST['categoryName'];
-  if (strlen($newCatName) >= 4) {
-    $data = array('name' => $newCatName);
+  $newGiftName = $_POST['giftName'];
+  if (strlen($newGiftName) >= 4) {
+    $data = array('name' => $newGiftName);
     $data_json = json_encode($data);
-    $url = "http://localhost:5000/customercategories/$id";
+    $url = "http://localhost:5000/gifts/$id";
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Content-Length: ' . strlen($data_json)));
@@ -32,23 +32,23 @@ if (isset($_POST['submitUpdate'])) {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $response  = curl_exec($ch);
     curl_close($ch);
-    echo "<script>alert('The Category Edited successfully')</script>";
+    echo "<script>alert('The Gift Edited successfully')</script>";
   } else {
-    echo "<script>alert('not valid category name')</script>";
+    echo "<script>alert('not valid gift name')</script>";
   }
 }
 if (isset($_POST['addNewCat'])) {
-  $newCatName = $_POST['newCatName'];
-  if (strlen($newCatName) <= 3) {
-    echo "<script>alert('not valid category name')</script>";
+  $newGiftName = $_POST['newGiftName'];
+  if (strlen($newGiftName) <= 3) {
+    echo "<script>alert('not valid gift name')</script>";
   } else {
     try {
 
-      $data = array('name' => $newCatName);
+      $data = array('name' => $newGiftName);
 
       $data_json = json_encode($data);
 
-      $url = 'http://localhost:5000/customercategories';
+      $url = 'http://localhost:5000/gifts';
 
       $ch = curl_init();
 
@@ -66,13 +66,13 @@ if (isset($_POST['addNewCat'])) {
 
       curl_close($ch);
 
-      echo "<script>alert('The Category added successfully')</script>";
+      echo "<script>alert('The Gift added successfully')</script>";
     } catch (PDOException $e) {
       echo $sql . "<br>" . $e->getMessage();
     }
   }
 }
-$api_url = 'http://localhost:5000/customercategories';
+$api_url = 'http://localhost:5000/gifts';
 
 $json_data = file_get_contents($api_url);
 
@@ -175,7 +175,7 @@ $user_data = $response_data;
               <a href="userController.php">
                 <i class="fas fa-table"></i>Users Controller</a>
             </li> -->
-            <li class="active has-sub">
+            <li class="has-sub">
               <a href="categoryController.php">
                 <i class="fas fa-table"></i>Categories Controller</a>
             </li>
@@ -183,11 +183,10 @@ $user_data = $response_data;
               <a href="eventController.php">
                 <i class="fas fa-table"></i>Events Controller</a>
             </li>
-            <li class="has-sub">
+            <li class="active has-sub">
               <a href="giftController.php">
                 <i class="fas fa-table"></i>Gifts Controller</a>
             </li>
-
 
 
           </ul>
@@ -269,20 +268,20 @@ $user_data = $response_data;
             <div class="row">
               <div class="col-md-12">
                 <!-- DATA TABLE -->
-                <h3 class="title-5 m-b-35">Categories Controller</h3>
+                <h3 class="title-5 m-b-35">Gifts Controller</h3>
                 <div class="table-data__tool">
                   <div class="table-data__tool-left">
 
                     <div class="col-lg-12">
                       <div class="card">
-                        <div class="card-header">Add New Category</div>
+                        <div class="card-header">Add New Gift</div>
                         <div class="card-body card-block">
                           <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="">
 
 
                             <div class="form-group">
                               <div class="input-group">
-                                <input id="newCatName" autocomplete="off" name="newCatName" class="form-control">
+                                <input id="newGiftName" autocomplete="off" name="newGiftName" class="form-control">
                                 <div class="input-group-addon">
                                   <i class="fa fa-plus-square"></i>
                                 </div>
@@ -305,13 +304,13 @@ $user_data = $response_data;
                     <thead>
                       <tr>
                         <th>id</th>
-                        <th>Category Name</th>
+                        <th>Gift Name</th>
                         <th></th>
                       </tr>
                     </thead>
                     <tbody>
                       <?php
-                      foreach ($user_data as $index => $category) {
+                      foreach ($user_data as $index => $gift) {
                       ?>
                         <tr class="tr-shadow">
 
@@ -319,7 +318,7 @@ $user_data = $response_data;
                             <?php echo $index + 1; ?>
                           </td>
                           <td>
-                            <span class="block-email"> <?php echo $category->name; ?>
+                            <span class="block-email"> <?php echo $gift->name; ?>
                             </span>
                           </td>
 
@@ -331,12 +330,12 @@ $user_data = $response_data;
 
                               <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
 
-                                <button class="item" data-toggle="tooltip" data-placement="top" title="Edit" name="updateCategory" value=<?php echo $category->id ?>>
+                                <button class="item" data-toggle="tooltip" data-placement="top" title="Edit" name="updateGift" value=<?php echo $gift->id ?>>
                                   <i class="zmdi zmdi-edit"></i>
                                 </button>
                               </form>
                               <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-                                <button class="item" data-toggle="tooltip" data-placement="top" title="Delete" name="deleteCat" value=<?php echo $category->id ?>>
+                                <button class="item" data-toggle="tooltip" data-placement="top" title="Delete" name="deleteGift" value=<?php echo $gift->id ?>>
                                   <i class="zmdi zmdi-delete"></i>
                                 </button>
                               </form>
@@ -347,19 +346,19 @@ $user_data = $response_data;
                         <tr class="spacer"></tr>
 
                         <?php
-                        if (isset($_POST['updateCategory']) && $category->id == $_POST["updateCategory"]) {
-                          $id = $_POST['updateCategory'];
+                        if (isset($_POST['updateGift']) && $gift->id == $_POST["updateGift"]) {
+                          $id = $_POST['updateGift'];
                         ?>
                           <div class="col-lg-6">
                             <div class="card">
-                              <div class="card-header">Edit <?php echo $category->name ?></div>
+                              <div class="card-header">Edit <?php echo $gift->name ?></div>
                               <div class="card-body card-block">
                                 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="">
 
-                                  <!-- <input type="hidden" id="catId" name="catId" class="form-control" value=<?php echo $category->id ?> disabled> -->
+                                  <!-- <input type="hidden" id="catId" name="catId" class="form-control" value=<?php echo $gift->id ?> disabled> -->
                                   <div class="form-group">
                                     <div class="input-group">
-                                      <input type="text" id="categoryName" name="categoryName" class="form-control" value=<?php echo $category->name ?>>
+                                      <input type="text" id="giftName" name="giftName" class="form-control" value=<?php echo $gift->name ?>>
                                       <div class="input-group-addon">
                                         <i class="fa fa-plus-square"></i>
                                       </div>
@@ -367,7 +366,7 @@ $user_data = $response_data;
                                   </div>
 
                                   <div class="form-actions form-group">
-                                    <button type="submit" class="btn btn-secondary btn-sm" name="submitUpdate" value=<?php echo $category->id ?>>Submit</button>
+                                    <button type="submit" class="btn btn-secondary btn-sm" name="submitUpdate" value=<?php echo $gift->id ?>>Submit</button>
                                   </div>
                                 </form>
                               </div>
