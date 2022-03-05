@@ -152,7 +152,7 @@ if (isset($_POST['addNewUser'])) {
                 <i class="fas fa-table"></i>Categories Controller</a>
             </li>
             <li class=" has-sub">
-              <a href="productController.php">
+              <a href="eventController.php">
                 <i class="fas fa-table"></i>Events Controller</a>
             </li>
 
