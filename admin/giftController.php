@@ -20,8 +20,9 @@ if (isset($_POST['deleteGift'])) {
 if (isset($_POST['submitUpdate'])) {
   $id = $_POST['submitUpdate'];
   $newGiftName = $_POST['giftName'];
-  if (strlen($newGiftName) >= 4) {
-    $data = array('name' => $newGiftName);
+  $newGiftQuentity = $_POST['newGiftQuentity'];
+  if (strlen($newGiftName) >= 4 && $newGiftQuentity > 0) {
+    $data = array('name' => $newGiftName, 'quentity' => $newGiftQuentity);
     $data_json = json_encode($data);
     $url = "http://localhost:5000/gifts/$id";
     $ch = curl_init();
@@ -34,17 +35,20 @@ if (isset($_POST['submitUpdate'])) {
     curl_close($ch);
     echo "<script>alert('The Gift Edited successfully')</script>";
   } else {
-    echo "<script>alert('not valid gift name')</script>";
+    echo "<script>alert('not valid gift name or quentity')</script>";
   }
 }
-if (isset($_POST['addNewCat'])) {
+if (isset($_POST['addNewGift'])) {
   $newGiftName = $_POST['newGiftName'];
+  $newGiftQuentity = $_POST['newGiftQuentity'];
   if (strlen($newGiftName) <= 3) {
     echo "<script>alert('not valid gift name')</script>";
+  } elseif ($newGiftQuentity <= 0) {
+    echo "<script>alert('not valid gift quentity')</script>";
   } else {
     try {
 
-      $data = array('name' => $newGiftName);
+      $data = array('name' => $newGiftName, 'quentity' => $newGiftQuentity);
 
       $data_json = json_encode($data);
 
@@ -277,18 +281,24 @@ $user_data = $response_data;
                         <div class="card-header">Add New Gift</div>
                         <div class="card-body card-block">
                           <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="">
-
-
                             <div class="form-group">
                               <div class="input-group">
-                                <input id="newGiftName" autocomplete="off" name="newGiftName" class="form-control">
+                                <input id="newGiftName" autocomplete="off" name="newGiftName" class="form-control" placeholder="Gift name">
+                                <div class="input-group-addon">
+                                  <i class="fa fa-plus-square"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <div class="input-group">
+                                <input type="number" id="newGiftQuentity" autocomplete="off" name="newGiftQuentity" class="form-control" min="1" value="0">
                                 <div class="input-group-addon">
                                   <i class="fa fa-plus-square"></i>
                                 </div>
                               </div>
                             </div>
                             <div class="form-actions form-group">
-                              <button type="submit" class="btn btn-secondary btn-sm" name="addNewCat">Add</button>
+                              <button type="submit" class="btn btn-secondary btn-sm" name="addNewGift">Add</button>
                             </div>
                           </form>
                         </div>
@@ -305,6 +315,7 @@ $user_data = $response_data;
                       <tr>
                         <th>id</th>
                         <th>Gift Name</th>
+                        <th>Quentity</th>
                         <th></th>
                       </tr>
                     </thead>
@@ -321,9 +332,10 @@ $user_data = $response_data;
                             <span class="block-email"> <?php echo $gift->name; ?>
                             </span>
                           </td>
-
-
-
+                          <td>
+                            <span class="block-email"> <?php echo $gift->quentity; ?>
+                            </span>
+                          </td>
                           <td>
 
                             <div class="table-data-feature">
@@ -359,6 +371,14 @@ $user_data = $response_data;
                                   <div class="form-group">
                                     <div class="input-group">
                                       <input type="text" id="giftName" name="giftName" class="form-control" value=<?php echo $gift->name ?>>
+                                      <div class="input-group-addon">
+                                        <i class="fa fa-plus-square"></i>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <div class="input-group">
+                                      <input type="number" min="1" id="newGiftQuentity" name="newGiftQuentity" class="form-control" value=<?php echo $gift->quentity ?>>
                                       <div class="input-group-addon">
                                         <i class="fa fa-plus-square"></i>
                                       </div>
