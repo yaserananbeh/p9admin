@@ -123,11 +123,11 @@
 
                 <div class="account-wrap">
                   <div class="account-item clearfix js-item-menu">
-                    <div class="image">
+                    <!-- <div class="image">
                       <img src="images/icon/avatar-01.jpg" alt="John Doe" />
-                    </div>
+                    </div> -->
                     <div class="content">
-                      <a class="js-acc-btn" href="#">john doe</a>
+                      <a class="js-acc-btn" href="#">Admin</a>
                     </div>
                     <div class="account-dropdown js-dropdown">
                       <div class="info clearfix">
@@ -138,9 +138,9 @@
                         </div>
                         <div class="content">
                           <h5 class="name">
-                            <a href="#">john doe</a>
+                            <a href="#">Admin</a>
                           </h5>
-                          <span class="email">johndoe@example.com</span>
+                          <span class="email">Admin@admin.com</span>
                         </div>
                       </div>
                       <div class="account-dropdown__body">
@@ -152,10 +152,10 @@
                           <a href="#">
                             <i class="zmdi zmdi-settings"></i>Setting</a>
                         </div>
-                        <div class="account-dropdown__item">
+                        <!-- <div class="account-dropdown__item">
                           <a href="#">
                             <i class="zmdi zmdi-money-box"></i>Billing</a>
-                        </div>
+                        </div> -->
                       </div>
                       <div class="account-dropdown__footer">
                         <a href="#">
@@ -179,8 +179,10 @@
               <div class="col-md-12">
                 <div class="overview-wrap">
                   <h2 class="title-1">overview</h2>
-                  <button class="au-btn au-btn-icon au-btn--blue">
-                    <i class="zmdi zmdi-plus"></i>add item</button>
+                  <!-- <button class="au-btn au-btn-icon au-btn--blue">
+                    <i class="zmdi zmdi-plus"></i>
+                    add item
+                  </button> -->
                 </div>
               </div>
             </div>
@@ -221,7 +223,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6 col-lg-3">
+              <!-- <div class="col-sm-6 col-lg-3">
                 <div class="overview-item overview-item--c3">
                   <div class="overview__inner">
                     <div class="overview-box clearfix">
@@ -235,6 +237,24 @@
                     </div>
                     <div class="overview-chart">
                       <canvas id="widgetChart3"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+              <div class="col-sm-6 col-lg-3">
+                <div class="overview-item overview-item--c4">
+                  <div class="overview__inner">
+                    <div class="overview-box clearfix">
+                      <div class="icon">
+                        <i class="zmdi zmdi-money"></i>
+                      </div>
+                      <div class="text">
+                        <h2>$1,060,386</h2>
+                        <span>total earnings</span>
+                      </div>
+                    </div>
+                    <div class="overview-chart">
+                      <canvas id="widgetChart4"></canvas>
                     </div>
                   </div>
                 </div>
@@ -258,7 +278,7 @@
                 </div>
               </div>
             </div>
-            <div class="row">
+            <!-- <div class="row">
               <div class="col-lg-6">
                 <div class="au-card recent-report">
                   <div class="au-card-inner">
@@ -705,11 +725,11 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
             <div class="row">
               <div class="col-md-12">
                 <div class="copyright">
-                  <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
+                  <p>Copyright © 2022 OEvent. All rights reserved. </p>
                 </div>
               </div>
             </div>
