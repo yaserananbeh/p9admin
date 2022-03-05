@@ -85,10 +85,10 @@
               <a class="js-arrow" href="index.php">
                 <i class="fas fa-tachometer-alt"></i>Dashboard</a>
             </li>
-            <li>
+            <!-- <li>
               <a href="userController.php">
                 <i class="fas fa-table"></i>Users Controller</a>
-            </li>
+            </li> -->
             <li class="has-sub">
               <a href="categoryController.php">
                 <i class="fas fa-table"></i>Categories Controller</a>
@@ -124,7 +124,7 @@
                 <div class="account-wrap">
                   <div class="account-item clearfix js-item-menu">
                     <!-- <div class="image">
-                      <img src="images/icon/avatar-01.jpg" alt="John Doe" />
+                      <img src="images/icon/avatar-01.jpg" alt="admin" />
                     </div> -->
                     <div class="content">
                       <a class="js-acc-btn" href="#">Admin</a>
@@ -133,7 +133,7 @@
                       <div class="info clearfix">
                         <div class="image">
                           <a href="#">
-                            <img src="images/icon/avatar-01.jpg" alt="John Doe" />
+                            <img src="images/icon/avatar-01.jpg" alt="admin" />
                           </a>
                         </div>
                         <div class="content">
@@ -484,7 +484,7 @@
                   </div>
                   <div class="au-task js-list-load">
                     <div class="au-task__title">
-                      <p>Tasks for John Doe</p>
+                      <p>Tasks for admin</p>
                     </div>
                     <div class="au-task-list js-scrollbar3">
                       <div class="au-task__item au-task__item--danger">

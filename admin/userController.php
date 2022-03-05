@@ -143,10 +143,10 @@ if (isset($_POST['addNewUser'])) {
 
             </li>
 
-            <li class="active has-sub">
+            <!-- <li class="active has-sub">
               <a href="userController.php">
                 <i class="fas fa-table"></i>Users Controller</a>
-            </li>
+            </li> -->
             <li class="has-sub">
               <a href="categoryController.php">
                 <i class="fas fa-table"></i>Categories Controller</a>
@@ -182,23 +182,23 @@ if (isset($_POST['addNewUser'])) {
                 <div class="account-wrap">
                   <div class="account-item clearfix js-item-menu">
                     <div class="image">
-                      <img src="images/icon/avatar-01.jpg" alt="John Doe" />
+                      <img src="images/icon/avatar-01.jpg" alt="admin" />
                     </div>
                     <div class="content">
-                      <a class="js-acc-btn" href="#">john doe</a>
+                      <a class="js-acc-btn" href="#">admin</a>
                     </div>
                     <div class="account-dropdown js-dropdown">
                       <div class="info clearfix">
                         <div class="image">
                           <a href="#">
-                            <img src="images/icon/avatar-01.jpg" alt="John Doe" />
+                            <img src="images/icon/avatar-01.jpg" alt="admin" />
                           </a>
                         </div>
                         <div class="content">
                           <h5 class="name">
-                            <a href="#">john doe</a>
+                            <a href="#">admin</a>
                           </h5>
-                          <span class="email">johndoe@example.com</span>
+                          <span class="email">admin@admin.com</span>
                         </div>
                       </div>
                       <div class="account-dropdown__body">
@@ -210,10 +210,10 @@ if (isset($_POST['addNewUser'])) {
                           <a href="#">
                             <i class="zmdi zmdi-settings"></i>Setting</a>
                         </div>
-                        <div class="account-dropdown__item">
+                        <!-- <div class="account-dropdown__item">
                           <a href="#">
                             <i class="zmdi zmdi-money-box"></i>Billing</a>
-                        </div>
+                        </div> -->
                       </div>
                       <div class="account-dropdown__footer">
                         <a href="#">
