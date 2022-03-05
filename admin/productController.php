@@ -188,7 +188,7 @@ if (isset($_POST['addNewProduct'])) {
       </li>
       <li class="active has-sub">
        <a href="productController.php">
-        <i class="fas fa-table"></i>Products Controller</a>
+        <i class="fas fa-table"></i>Events Controller</a>
       </li>
      </ul>
     </nav>
@@ -269,7 +269,7 @@ if (isset($_POST['addNewProduct'])) {
       <div class="row">
        <div class="col-md-12">
         <!-- DATA TABLE -->
-        <h3 class="title-5 m-b-35">Products Controller</h3>
+        <h3 class="title-5 m-b-35">Events Controller</h3>
         <div class="table-data__tool">
          <div class="table-data__tool-left">
 

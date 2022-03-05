@@ -95,7 +95,7 @@
             </li>
             <li class="has-sub">
               <a href="productController.php">
-                <i class="fas fa-table"></i>Products Controller</a>
+                <i class="fas fa-table"></i>Events Controller</a>
             </li>
 
 
