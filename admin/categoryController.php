@@ -1,47 +1,85 @@
 <?php
 session_start();
-include "../config/connect.php";
+// include "../config/connect.php";
+
 
 if (isset($_POST['deleteCat'])) {
   $id = $_POST['deleteCat'];
-  $sql = "DELETE FROM categories WHERE id='$id'";
-  $conn->exec($sql);
+  $data = array();
+  $data_json = json_encode($data);
+  $url = "http://localhost:5000/customercategories/$id";
+  $curl_handle = curl_init();
+  curl_setopt($curl_handle, CURLOPT_URL, $url);
+  curl_setopt($curl_handle, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Content-Length: ' . strlen($data_json)));
+  curl_setopt($curl_handle, CURLOPT_CUSTOMREQUEST, "DELETE");
+  curl_setopt($curl_handle, CURLOPT_POSTFIELDS, $data_json);
+  curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
+  $response  = curl_exec($curl_handle);
+  curl_close($curl_handle);
 }
 if (isset($_POST['submitUpdate'])) {
   $id = $_POST['submitUpdate'];
   $newCatName = $_POST['categoryName'];
   if (strlen($newCatName) >= 4) {
-    $sql = "UPDATE categories SET category_name ='$newCatName' WHERE id='$id'";
-    $conn->exec($sql);
+    $data = array('name' => $newCatName);
+    $data_json = json_encode($data);
+    $url = "http://localhost:5000/customercategories/$id";
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Content-Length: ' . strlen($data_json)));
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data_json);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response  = curl_exec($ch);
+    curl_close($ch);
     echo "<script>alert('The Category Edited successfully')</script>";
-  }
-  else{
+  } else {
     echo "<script>alert('not valid category name')</script>";
-
   }
 }
-// count the categories
-$sql = "SELECT id FROM categories ORDER BY ID DESC LIMIT 1";
-$result = $conn->query($sql);
-$last_id = $result->fetch()["id"];
-
-
-
 if (isset($_POST['addNewCat'])) {
   $newCatName = $_POST['newCatName'];
-  if (strlen($newCatName) < 3) {
+  if (strlen($newCatName) <= 3) {
     echo "<script>alert('not valid category name')</script>";
   } else {
     try {
-      $sql = "INSERT INTO categories ( category_name)
-                    VALUES ('$newCatName')";
-      $conn->exec($sql);
+
+      $data = array('name' => $newCatName);
+
+      $data_json = json_encode($data);
+
+      $url = 'http://localhost:5000/customercategories';
+
+      $ch = curl_init();
+
+      curl_setopt($ch, CURLOPT_URL, $url);
+
+      curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+
+      curl_setopt($ch, CURLOPT_POST, 1);
+
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $data_json);
+
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+      $response  = curl_exec($ch);
+
+      curl_close($ch);
+
       echo "<script>alert('The Category added successfully')</script>";
     } catch (PDOException $e) {
       echo $sql . "<br>" . $e->getMessage();
     }
   }
 }
+$api_url = 'http://localhost:5000/customercategories';
+
+$json_data = file_get_contents($api_url);
+
+$response_data = json_decode($json_data);
+
+$user_data = $response_data;
+
 
 ?>
 <!DOCTYPE html>
@@ -236,15 +274,7 @@ if (isset($_POST['addNewCat'])) {
                         <div class="card-header">Add New Category</div>
                         <div class="card-body card-block">
                           <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="">
-                            <div class="form-group">
-                              <div class="input-group">
-                                <input type="text" id="newCatId" name="newCatId" class="form-control" value="<?php echo $last_id + 1; ?>" disabled>
 
-                                <div class="input-group-addon">
-                                  <i class="fa fa-sort-numeric-asc"></i>
-                                </div>
-                              </div>
-                            </div>
 
                             <div class="form-group">
                               <div class="input-group">
@@ -270,89 +300,79 @@ if (isset($_POST['addNewCat'])) {
                   <table class="table table-data2">
                     <thead>
                       <tr>
-
                         <th>id</th>
                         <th>Category Name</th>
-
                         <th></th>
                       </tr>
                     </thead>
                     <tbody>
                       <?php
-                      $sql = "SELECT * FROM categories";
-                      $result = $conn->query($sql);
-                      if ($result->rowCount() > 0) {
-                        while ($row = $result->fetch()) {
+                      foreach ($user_data as $index => $category) {
                       ?>
-                          <tr class="tr-shadow">
+                        <tr class="tr-shadow">
 
-                            <td>
-                              <?php echo $row["id"]; ?>
-                            </td>
-                            <td>
-                              <span class="block-email"> <?php echo $row["category_name"]; ?>
-                              </span>
-                            </td>
+                          <td>
+                            <?php echo $index + 1; ?>
+                          </td>
+                          <td>
+                            <span class="block-email"> <?php echo $category->name; ?>
+                            </span>
+                          </td>
 
 
 
-                            <td>
+                          <td>
 
-                              <div class="table-data-feature">
+                            <div class="table-data-feature">
 
-                                <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+                              <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
 
-                                  <button class="item" data-toggle="tooltip" data-placement="top" title="Edit" name="updateCategory" value=<?php echo $row["id"] ?>>
-                                    <i class="zmdi zmdi-edit"></i>
-                                  </button>
-                                </form>
-                                <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-                                  <button class="item" data-toggle="tooltip" data-placement="top" title="Delete" name="deleteCat" value=<?php echo $row["id"] ?>>
-                                    <i class="zmdi zmdi-delete"></i>
-                                  </button>
-                                </form>
-                              </div>
+                                <button class="item" data-toggle="tooltip" data-placement="top" title="Edit" name="updateCategory" value=<?php echo $category->id ?>>
+                                  <i class="zmdi zmdi-edit"></i>
+                                </button>
+                              </form>
+                              <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+                                <button class="item" data-toggle="tooltip" data-placement="top" title="Delete" name="deleteCat" value=<?php echo $category->id ?>>
+                                  <i class="zmdi zmdi-delete"></i>
+                                </button>
+                              </form>
+                            </div>
 
-                            </td>
-                          </tr>
-                          <tr class="spacer"></tr>
-                          <?php
-                          if (isset($_POST['updateCategory']) && $row["id"] == $_POST["updateCategory"]) {
-                            $id = $_POST['updateCategory'];
-                          ?>
-                            <div class="col-lg-6">
-                              <div class="card">
-                                <div class="card-header">Update Form</div>
-                                <div class="card-body card-block">
-                                  <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="">
-                                    <div class="form-group">
-                                      <div class="input-group">
-                                        <input type="text" id="catId" name="catId" class="form-control" value=<?php echo $row["id"] ?> disabled>
-                                        <div class="input-group-addon">
-                                          <i class="fa fa-sort-numeric-asc"></i>
-                                        </div>
+                          </td>
+                        </tr>
+                        <tr class="spacer"></tr>
+
+                        <?php
+                        if (isset($_POST['updateCategory']) && $category->id == $_POST["updateCategory"]) {
+                          $id = $_POST['updateCategory'];
+                        ?>
+                          <div class="col-lg-6">
+                            <div class="card">
+                              <div class="card-header">Edit <?php echo $category->name ?></div>
+                              <div class="card-body card-block">
+                                <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="">
+
+                                  <!-- <input type="hidden" id="catId" name="catId" class="form-control" value=<?php echo $category->id ?> disabled> -->
+                                  <div class="form-group">
+                                    <div class="input-group">
+                                      <input type="text" id="categoryName" name="categoryName" class="form-control" value=<?php echo $category->name ?>>
+                                      <div class="input-group-addon">
+                                        <i class="fa fa-plus-square"></i>
                                       </div>
                                     </div>
-                                    <div class="form-group">
-                                      <div class="input-group">
-                                        <input type="text" id="categoryName" name="categoryName" class="form-control" value=<?php echo $row["category_name"] ?>>
-                                        <div class="input-group-addon">
-                                          <i class="fa fa-plus-square"></i>
-                                        </div>
-                                      </div>
-                                    </div>
+                                  </div>
 
-                                    <div class="form-actions form-group">
-                                      <button type="submit" class="btn btn-secondary btn-sm" name="submitUpdate" value=<?php echo $row["id"] ?>>Submit</button>
-                                    </div>
-                                  </form>
-                                </div>
+                                  <div class="form-actions form-group">
+                                    <button type="submit" class="btn btn-secondary btn-sm" name="submitUpdate" value=<?php echo $category->id ?>>Submit</button>
+                                  </div>
+                                </form>
                               </div>
                             </div>
+                          </div>
                       <?php
-                          }
                         }
                       }
+                      // die;
                       ?>
 
 
