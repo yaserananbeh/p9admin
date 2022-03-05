@@ -1,76 +1,91 @@
 <?php
 session_start();
-include "../config/connect.php";
 
 if (isset($_POST['deleteEvent'])) {
   $id = $_POST['deleteEvent'];
-  $sql = "DELETE FROM events WHERE id='$id'";
-  $conn->exec($sql);
+  $data = array();
+  $data_json = json_encode($data);
+  $url = "http://localhost:5000/events/$id";
+  $curl_handle = curl_init();
+  curl_setopt($curl_handle, CURLOPT_URL, $url);
+  curl_setopt($curl_handle, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Content-Length: ' . strlen($data_json)));
+  curl_setopt($curl_handle, CURLOPT_CUSTOMREQUEST, "DELETE");
+  curl_setopt($curl_handle, CURLOPT_POSTFIELDS, $data_json);
+  curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
+  $response  = curl_exec($curl_handle);
+  curl_close($curl_handle);
 }
 if (isset($_POST['submitUpdate'])) {
   $id = $_POST['submitUpdate'];
   $newEventName = $_POST['newEventName'];
-  $newEventPrice = $_POST['newEventPrice'];
-  $newEventDesc = $_POST['newEventDesc'];
-  $newEventImage = $_POST['newEventImage'];
-  $newEventDiscount = $_POST['newEventDiscount'];
-  $newEventStock = $_POST['newEventStock'];
-  $newEventCategory = $_POST['newEventCategory'];
+  $newEventDate = $_POST['newEventDate'];
+  $newEventTime = $_POST['newEventTime'];
+  $newEventLocation = $_POST['newEventLocation'];
+  $newEventAttendenceCapacity = $_POST['newEventAttendenceCapacity'];
   if (strlen($newEventName) < 4) {
     echo "<script>alert('not valid event name')</script>";
-  } else if ($newEventPrice <= 0) {
-    echo "<script>alert('not valid event price')</script>";
-  } else if (strlen($newEventDesc) < 4) {
-    echo "<script>alert('not valid event description')</script>";
-  } else if (strlen($newEventImage) < 4) {
-    echo "<script>alert('not valid event image')</script>";
-  } else if ($newEventDiscount < 0) {
-    echo "<script>alert('not valid event discount')</script>";
-  } else if ($newEventStock <= 0) {
-    echo "<script>alert('not valid event stock quantity')</script>";
-  } else if (strlen($newEventCategory) <= 0) {
-    echo "<script>alert('not valid event category')</script>";
+  } else if (strlen($newEventDate) <= 3) {
+    echo "<script>alert('not valid event date')</script>";
+  } else if (strlen($newEventTime) < 4) {
+    echo "<script>alert('not valid event time')</script>";
+  } else if (strlen($newEventLocation) < 4) {
+    echo "<script>alert('not valid event Location')</script>";
+  } else if ($newEventAttendenceCapacity < 0) {
+    echo "<script>alert('not valid event Attendence Capacity')</script>";
   } else {
-    $sql = "UPDATE events SET 
-  event_name='$newEventName',
-  event_price='$newEventPrice',
-  event_desc='$newEventDesc',
-  event_image='$newEventImage',
-  discount='$newEventDiscount',
-  stock='$newEventStock',
-  category_id='$newEventCategory' 
-   WHERE id='$id'";
-    $conn->exec($sql);
+    $data = array('name' => $newEventName, 'date' => $newEventDate, 'time' => $newEventTime, 'location' => $newEventLocation, 'attendanceCapacity' => $newEventAttendenceCapacity);
+    $data_json = json_encode($data);
+    $url = "http://localhost:5000/events/$id";
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Content-Length: ' . strlen($data_json)));
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data_json);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response  = curl_exec($ch);
+    curl_close($ch);
     echo "<script>alert('The Category Edited successfully')</script>";
   }
 }
 if (isset($_POST['addNewEvent'])) {
   $newEventName = $_POST['newEventName'];
-  $newEventPrice = $_POST['newEventPrice'];
-  $newEventDesc = $_POST['newEventDesc'];
-  $newEventImage = $_POST['newEventImage'];
-  $newEventDiscount = $_POST['newEventDiscount'];
-  $newEventStock = $_POST['newEventStock'];
-  $newEventCategory = $_POST['newEventCategory'];
+  $newEventDate = $_POST['newEventDate'];
+  $newEventTime = $_POST['newEventTime'];
+  $newEventLocation = $_POST['newEventLocation'];
+  $newEventAttendenceCapacity = $_POST['newEventAttendenceCapacity'];
   if (strlen($newEventName) < 4) {
     echo "<script>alert('not valid event name')</script>";
-  } else if ($newEventPrice <= 0) {
-    echo "<script>alert('not valid event price')</script>";
-  } else if (strlen($newEventDesc) < 4) {
-    echo "<script>alert('not valid event description')</script>";
-  } else if (strlen($newEventImage) < 4) {
-    echo "<script>alert('not valid event image')</script>";
-  } else if ($newEventDiscount < 0) {
+  } else if (strlen($newEventDate) < 4) {
+    echo "<script>alert('not valid event date')</script>";
+  } else if (strlen($newEventTime) < 4) {
+    echo "<script>alert('not valid event time')</script>";
+  } else if (strlen($newEventLocation) < 4) {
+    echo "<script>alert('not valid event location')</script>";
+  } else if ($newEventAttendenceCapacity < 0) {
     echo "<script>alert('not valid event discount')</script>";
-  } else if ($newEventStock <= 0) {
-    echo "<script>alert('not valid event stock quantity')</script>";
-  } else if (strlen($newEventCategory) <= 0) {
-    echo "<script>alert('not valid event category')</script>";
   } else {
     try {
-      $sql = "INSERT INTO events ( event_name,event_price,event_desc,event_image,discount,stock,category_id)
-                    VALUES ('$newEventName','$newEventPrice','$newEventDesc','$newEventImage','$newEventDiscount','$newEventStock','$newEventCategory')";
-      $conn->exec($sql);
+      $data = array('name' => $newEventName, 'date' => $newEventDate, 'time' => $newEventTime, 'location' => $newEventLocation, 'attendanceCapacity' => $newEventAttendenceCapacity);
+
+      $data_json = json_encode($data);
+
+      $url = 'http://localhost:5000/events';
+
+      $ch = curl_init();
+
+      curl_setopt($ch, CURLOPT_URL, $url);
+
+      curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+
+      curl_setopt($ch, CURLOPT_POST, 1);
+
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $data_json);
+
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+      $response  = curl_exec($ch);
+
+      curl_close($ch);
       echo "<script>alert('The Event added successfully')</script>";
     } catch (PDOException $e) {
       echo $sql . "<br>" . $e->getMessage();
@@ -83,20 +98,8 @@ $json_data = file_get_contents($api_url);
 
 $response_data = json_decode($json_data);
 
-$user_data = $response_data;
-// foreach ($user_data as $user) {
-//   echo "name: " . $user->name;
-//   echo "<br />";
-//   echo "date: " . $user->date;
-//   echo "<br />";
-//   echo "time: " . $user->time;
-//   echo "<br />";
-//   echo "location: " . $user->location;
-//   echo "<br />";
-//   echo "attendenceCapacity: " . $user->attendenceCapacity;
-//   echo "<br /> <br />";
-// }
-// die;
+$event_data = $response_data;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -292,7 +295,7 @@ $user_data = $response_data;
                           <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="">
                             <div class="form-group">
                               <div class="input-group">
-                                <input id="newEventName" name="newEventName" class="form-control" placeholder="event name">
+                                <input id="newEventName" name="newEventName" class="form-control" placeholder="Name">
                                 <div class="input-group-addon">
                                   <i class="fa fa-plus-square"></i>
                                 </div>
@@ -300,7 +303,7 @@ $user_data = $response_data;
                             </div>
                             <div class="form-group">
                               <div class="input-group">
-                                <input type="number" min="0" id="newEventPrice" name="newEventPrice" class="form-control" placeholder="event price in jd">
+                                <input type="date" min="0" id="newEventDate" name="newEventDate" class="form-control" placeholder="event date in jd">
                                 <div class="input-group-addon">
                                   <i class="fa fa-plus-square"></i>
                                 </div>
@@ -308,7 +311,7 @@ $user_data = $response_data;
                             </div>
                             <div class="form-group">
                               <div class="input-group">
-                                <input id="newEventDesc" name="newEventDesc" class="form-control" placeholder="event description">
+                                <input type="time" id="newEventTime" name="newEventTime" class="form-control" placeholder="event time">
                                 <div class="input-group-addon">
                                   <i class="fa fa-plus-square"></i>
                                 </div>
@@ -316,7 +319,7 @@ $user_data = $response_data;
                             </div>
                             <div class="form-group">
                               <div class="input-group">
-                                <input id="newEventImage" name="newEventImage" class="form-control" placeholder="event image">
+                                <input id="newEventLocation" name="newEventLocation" class="form-control" placeholder="Location">
                                 <div class="input-group-addon">
                                   <i class="fa fa-plus-square"></i>
                                 </div>
@@ -324,34 +327,7 @@ $user_data = $response_data;
                             </div>
                             <div class="form-group">
                               <div class="input-group">
-                                <input type="number" min="0" id="newEventDiscount" name="newEventDiscount" class="form-control" placeholder="event discount default 0">
-                                <div class="input-group-addon">
-                                  <i class="fa fa-plus-square"></i>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <div class="input-group">
-                                <input type="number" min="1" id="newEventStock" name="newEventStock" class="form-control" placeholder="event stock quantity">
-                                <div class="input-group-addon">
-                                  <i class="fa fa-plus-square"></i>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <div class="input-group">
-                                <select name="newEventCategory" id="newEventCategory">
-                                  <option value="" selected disabled hidden>Choose a category</option>
-                                  <?php
-                                  $sql = "SELECT * FROM categories";
-                                  $result = $conn->query($sql);
-                                  if ($result->rowCount() > 0) {
-                                    while ($row = $result->fetch()) {
-                                  ?>
-                                      <option value="<?php echo $row["id"] ?>"><?php echo $row["category_name"] ?></option>
-                                  <?php  }
-                                  } ?>
-                                </select>
+                                <input type="number" min="0" id="newEventAttendenceCapacity" name="newEventAttendenceCapacity" class="form-control" placeholder="Attendence Capacity">
                                 <div class="input-group-addon">
                                   <i class="fa fa-plus-square"></i>
                                 </div>
@@ -384,7 +360,7 @@ $user_data = $response_data;
                     </thead>
                     <tbody>
                       <?php
-                      foreach ($user_data as $index => $event) {
+                      foreach ($event_data as $index => $event) {
                       ?>
                         <tr class="tr-shadow">
                           <td>
@@ -434,15 +410,7 @@ $user_data = $response_data;
                               <div class="card-header">Edit <?php echo $event->name; ?></div>
                               <div class="card-body card-block">
                                 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="">
-                                  <div class="form-group">
-                                    <div class="input-group">
-                                      <input type="text" id="newEventId" name="newEventId" class="form-control" value="<?php echo $event->id; ?>" disabled>
 
-                                      <div class="input-group-addon">
-                                        <i class="fa fa-sort-numeric-asc"></i>
-                                      </div>
-                                    </div>
-                                  </div>
                                   <div class="form-group">
                                     <div class="input-group">
                                       <input id="newEventName" name="newEventName" class="form-control" value="<?php echo $event->name; ?>">
@@ -453,7 +421,7 @@ $user_data = $response_data;
                                   </div>
                                   <div class="form-group">
                                     <div class="input-group">
-                                      <input type="text" id="newEventPrice" name="newEventPrice" class="form-control" value="<?php echo $event->date; ?>">
+                                      <input type="date" id="newEventDate" name="newEventDate" class="form-control" value="<?php echo $event->date; ?>">
                                       <div class="input-group-addon">
                                         <i class="fa fa-plus-square"></i>
                                       </div>
@@ -461,7 +429,7 @@ $user_data = $response_data;
                                   </div>
                                   <div class="form-group">
                                     <div class="input-group">
-                                      <input id="newEventDesc" name="newEventDesc" class="form-control" value="<?php echo $event->time; ?>">
+                                      <input type="time" id="newEventTime" name="newEventTime" class="form-control" value="<?php echo $event->time; ?>">
                                       <div class="input-group-addon">
                                         <i class="fa fa-plus-square"></i>
                                       </div>
@@ -469,7 +437,7 @@ $user_data = $response_data;
                                   </div>
                                   <div class="form-group">
                                     <div class="input-group">
-                                      <input id="newEventImage" name="newEventImage" class="form-control" value="<?php echo $event->location; ?>">
+                                      <input id="newEventLocation" name="newEventLocation" class="form-control" value="<?php echo $event->location; ?>">
                                       <div class="input-group-addon">
                                         <i class="fa fa-plus-square"></i>
                                       </div>
@@ -477,7 +445,7 @@ $user_data = $response_data;
                                   </div>
                                   <div class="form-group">
                                     <div class="input-group">
-                                      <input type="text" id="newEventDiscount" name="newEventDiscount" class="form-control" value="<?php echo $event->attendenceCapacity; ?>">
+                                      <input type="number" min="0" id="newEventAttendenceCapacity" name="newEventAttendenceCapacity" class="form-control" value="<?php echo $event->attendenceCapacity; ?>">
                                       <div class="input-group-addon">
                                         <i class="fa fa-plus-square"></i>
                                       </div>
